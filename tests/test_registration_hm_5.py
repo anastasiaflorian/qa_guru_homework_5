@@ -3,7 +3,7 @@ import os.path
 
 
 def test_success_registration():
-    browser.open('https://demoqa.com/automation-practice-form')
+    browser.open('/automation-practice-form')
 
     # Ввод личных данных
     browser.element('#firstName').should(be.blank).type('Anastasia')
@@ -16,10 +16,11 @@ def test_success_registration():
     browser.element('.react-datepicker__month-select').click().element('[value="11"]').click()
     browser.element('.react-datepicker__day--004').click()
 
+    browser.element('label[for=hobbies-checkbox-1]').perform(command.js.scroll_into_view)
+
     # Выбор предмета и хобби
-    browser.element('label[for=gender-radio-2]').click()
-    browser.element('#subjectsInput').should(be.blank).type('geometry')
-    browser.all('.custom-control-label').element_by(have.text('Sports')).click()
+    browser.element('#subjectsInput').type('Computer Science').press_enter()
+    browser.element("[for='hobbies-checkbox-1']").click()
 
     # Выбор картинки
     browser.element('#uploadPicture').send_keys(os.path.abspath('image/pngwing.com (1).png'))
@@ -33,7 +34,7 @@ def test_success_registration():
 
     # Кнопка Submit
     browser.element('#submit').perform(command.js.scroll_into_view)
-    browser.element('#submit').click()
+    browser.element('#submit').execute_script('element.click()')
 
     # Проверка появления модального окна об успешной регистрации
     browser.element('.modal-content').element('.modal-header').should(have.text('Thanks for submitting the form'))
@@ -45,8 +46,8 @@ def test_success_registration():
         'Female',
         '9999999999',
         '04 December,1995',
-        'geometry',
+        'Computer Science',
         'Sports',
-        'image/pngwing.com (1).png',
+        'pngwing.com (1).png',
         'LS',
         'Uttar Pradesh Lucknow'))
